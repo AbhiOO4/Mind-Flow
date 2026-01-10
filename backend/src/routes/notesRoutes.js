@@ -12,7 +12,7 @@ router.get('/', getNotes)
 router.get('/:id', viewNote)
 
 //make a edit request to notes
-router.patch('/:id', editNote)
+router.put('/:id', editNote)
 
 //make a create request
 router.post('/', createNote)
