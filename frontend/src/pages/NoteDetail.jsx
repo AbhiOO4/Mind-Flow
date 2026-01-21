@@ -58,7 +58,7 @@ const NoteDetail = () => {
         }
         try{
             await api.delete(`/notes/${id}`)
-            navigate('/')
+            navigate('/home')
             toast.success("Note deleted successfully")
         }catch(error){
             if (error.response?.status === 429){
@@ -78,7 +78,7 @@ const NoteDetail = () => {
     <div className='min-h-screen bg-base-200'>
       <div className='container mx-auto max-w-3xl px-4 py-8'>
         <div className='flex items-center mb-6 justify-between'>
-          <Link to={"/"} className='btn btn-ghost mb-6' >
+          <Link to={"/home"} className='btn btn-ghost mb-6' >
             <ArrowLeftIcon className="" />
             Back to Nodes
           </Link>

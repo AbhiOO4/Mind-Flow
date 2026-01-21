@@ -1,22 +1,26 @@
 
-import React, { use, useEffect, useEffectEvent } from 'react'
+import { useEffect } from 'react'
 import Navbar from '../components/Navbar'
 import { useState } from 'react'
 import RateLimitedUi from '../components/RateLimitedUi'
-import axios from 'axios'
 import toast from 'react-hot-toast'
 import Loading from '../components/Loading'
-import { Turtle } from 'lucide-react'
 import NoteCard from '../components/NoteCard'
 import api from '../lib/axios.js'
 import EmptyNotes from '../components/EmptyNotes.jsx'
+import { useNavigate } from 'react-router'
 
 const HomePage = () => {
   const [isRateLimited, setRateLimited] = useState(false)
   const [notes, setNotes] = useState([])
   const [loading, setLoading] = useState(true)
+  const [loggedInUser, setLoggedInUser] = useState(null)
+  const navigate = useNavigate()
 
   useEffect(() => {
+    const token = localStorage.getItem("token")
+    const username = localStorage.getItem("username")
+    setLoggedInUser(username)
     const fetchNotes = async () => {
       try{
         const res = await api.get("/notes")
@@ -36,9 +40,16 @@ const HomePage = () => {
     fetchNotes()
   }, [])
 
+  const handleLogout = () => {
+    localStorage.removeItem('token')
+    localStorage.removeItem('username')
+    navigate('/')
+    toast.success("Logged out successfully")
+  }
+
   return (
     <div className='min-h-screen'>
-      <Navbar/>
+      <Navbar loggedInUser={loggedInUser} logout={handleLogout}/>
       {loading && <Loading/>}
       {isRateLimited && <RateLimitedUi/>}
 

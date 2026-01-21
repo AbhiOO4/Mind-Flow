@@ -1,9 +1,9 @@
 
 import Note from '../model/Note.js'
 
-export async function getNotes (_, res) {
+export async function getNotes (req, res) {
     try{
-        const notes = await Note.find().sort({createdAt:-1})
+        const notes = await Note.find({user: req.user._id}).sort({createdAt:-1})
         res.status(200).json(notes)
     }catch(error){
         console.error("Error in getAllNotes controller", error)
@@ -25,9 +25,10 @@ export async function viewNote (req, res) {
 
 export async function createNote (req, res) {
     try{
+        const id = req.user._id
         const {title, content} = req.body
-        const newNote = new Note({title, content})
-        const savedNote = await newNote.save()
+        const newNote = new Note({title, content, user:id })
+        const savedNote = await newNote.save() 
         res.status(201).json(savedNote)
     }catch(error){
         console.error("Error in createNote controller", error)
