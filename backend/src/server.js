@@ -14,6 +14,7 @@ import cors from 'cors'
 
 import path from 'path'
 
+
 dotenv.config({quiet: true})
 const app = express()
 const __dirname = path.resolve()
@@ -28,7 +29,6 @@ if (process.env.NODE_ENV !== "production"){
 
 
 app.use(express.json());
-app.use(rateLimiter)
 
 
 //routes

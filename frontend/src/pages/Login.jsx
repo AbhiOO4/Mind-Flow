@@ -31,9 +31,19 @@ function Login() {
                 navigate('/home')
             }, 1000)
             toast.success(`Welcome ${name}`)
-        }catch(err){
-            console.log(err)
-            toast.error('Not able to login')
+        }catch(error){
+            if (error.response?.status === 429){
+                toast.error("Too many attempts, try again later", {duration: 5000})
+            }
+            else if (error.response?.status === 403) {
+                if (error.response?.data?.message) {
+                    toast.error(error.response.data.message)
+                }
+            }else{
+                toast.error('Not able to login')
+            }
+            console.log(error)
+            
         }finally{
             setLoging(false)
         }

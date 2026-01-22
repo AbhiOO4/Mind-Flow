@@ -2,7 +2,6 @@ import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router';
 import { ArrowLeftIcon } from 'lucide-react';
 import toast from 'react-hot-toast';
-import axios from 'axios';
 import api from '../lib/axios.js';
 
 const NoteCreate = () => {
@@ -26,8 +25,14 @@ const NoteCreate = () => {
       navigate('/home')
     }catch(error){
       if (error.response?.status === 429){
-        toast.error("Slow down, you are creating notes too fast !!", {duration: 4000})
-      }else{
+        toast.error("Too many requests, try again later !!", {duration: 4000})
+      }
+      else if (error.response?.status === 400) {
+        if (error.response?.data?.message) {
+          toast.error(error.response.data.message)
+        }
+      }
+      else{
         toast.error("Failed to create note, try again later")
       }
       console.log(error)

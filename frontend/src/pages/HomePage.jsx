@@ -41,6 +41,9 @@ const HomePage = () => {
   }, [])
 
   const handleLogout = () => {
+    if (!window.confirm("Are you sure you want to delete this Note ?")) {
+      return
+    }
     localStorage.removeItem('token')
     localStorage.removeItem('username')
     navigate('/')

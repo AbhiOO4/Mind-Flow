@@ -32,7 +32,7 @@ const NoteCard = ({ note, setNotes }) => {
             <div className="card border-t-8 border-2 border-primary bg-base-100 w-96 shadow-sm">
                 <div className="card-body">
                     <h2 className="card-title text-base-content">{note.title}</h2>
-                    <p>{note.content}</p>
+                    {/* <p>{note.content}</p> */}
                     <div className="card-actions justify-between items-center mt-4">
                         <span className='text-sm text-base-content/60'>{formatDate(new Date(note.createdAt))}</span>
                         <div className='flex items-center gap-1'>

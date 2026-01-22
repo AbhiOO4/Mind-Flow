@@ -23,14 +23,20 @@ const SignUp = () => {
             navigate('/login')
         } catch (err) {
             if (err.response?.status === 409){
-                return toast.error('User already exists')
+                toast.error('User already exists')
+            }
+            else if (err.response?.status === 429){
+                toast.error("Too many attempts, try again later", {duration: 5000})
             }
             else if (err.response?.status === 400){
                 if (err.response?.data?.message){
-                    return toast.error(err.response.data.message)
+                    toast.error(err.response.data.message)
                 }
+            }else{
+                toast.error("Sign up failed")
             }
-            toast.error("Sign up failed")
+            console.log(err)
+            
         } finally {
             setRegistering(false)
         }

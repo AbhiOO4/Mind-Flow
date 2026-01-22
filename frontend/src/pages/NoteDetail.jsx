@@ -11,7 +11,6 @@ const NoteDetail = () => {
   const [note, setNote] = useState(null)
   const [loading, setLoading] = useState(true)
   const [saving, setSaving] = useState(false)
-
   const navigate = useNavigate()
 
   const { id } = useParams()
@@ -22,8 +21,13 @@ const NoteDetail = () => {
         const res = await api.get(`/notes/${id}`)
         setNote(res.data)
       } catch (error) {
+        if (error.response?.status === 429) {
+          navigate('/home')
+          toast.error("Too many requets, try again later", { duration: 5000 })
+        }else{
+           toast.error("failed to fetch the note")
+        }
         console.log(error)
-        toast.error("failed to fetch the note")
       } finally {
         setLoading(false)
       }
@@ -33,22 +37,30 @@ const NoteDetail = () => {
   }, [])
 
   const handleSave = async () => {
-    if (!note.title.trim() || !note.content.trim()){
+    if (!note.title.trim() || !note.content.trim()) {
       toast.error("All fields are required")
-      return 
+      return
     }
 
     setSaving(true)
-    try{
-      await api.put(`/notes/${id}`, note)
+    try {
+      await api.put(`/notes/${id}`, {title: note.title, content: note.content})
       toast.success("Note updated successfully !!")
-    }catch(error){
+    } catch (error) {
+      if (error.response?.status === 429) {
+        toast.error("Too many requets, try again later", { duration: 5000 })
+      }
+      else if (error.response?.status === 400) {
+              if (error.response?.data?.message) {
+                toast.error(error.response.data.message)
+              }
+      }else{
+        toast.error("Failed to update note")
+      }
       console.log(error)
-      toast.error("Failed to update note")
-    }finally{
+    } finally {
       setSaving(false)
     }
-
   }
 
    const handleDelete = async (e, id) => {
@@ -58,12 +70,13 @@ const NoteDetail = () => {
         }
         try{
             await api.delete(`/notes/${id}`)
-            navigate('/home')
+            navigate('/home', {replace: true})
             toast.success("Note deleted successfully")
         }catch(error){
             if (error.response?.status === 429){
-                toast.error("You are deleting too fast, try again later", {duration: 5000})
-            }else{
+                toast.error("Too many requets, try again later", {duration: 5000})
+            }
+            else{
                 toast.error("Failed to delete the node")
             }
             console.log(error)
