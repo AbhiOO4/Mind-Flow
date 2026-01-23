@@ -22,7 +22,7 @@ const Navbar = ({ loggedInUser = null, logout }) => {
               className="card card-compact dropdown-content bg-base-100 z-[1] mt-3 w-52 shadow">
               <Link to={"/create"} className="btn btn-primary btn-sm sm:btn-md">
                 <PlusIcon className='size-5' />
-                <span className='hidden sm:inline'>Add note</span>
+                <span className='inline'>Add note</span>
               </Link>
             </div>
           </div>
@@ -48,7 +48,7 @@ const Navbar = ({ loggedInUser = null, logout }) => {
                 className=''
                 onClick={logout}
               >
-                <span className='hidden sm:inline'>Logout</span>
+                <span className='inline'>Logout</span>
                 <LogOut className="size-4 sm:size-5" />
               </button></li>
             </ul>
